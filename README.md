@@ -1,1 +1,1 @@
-# FullStack-palautusrepositorio
+Full Stack openin harjoitustehtävien palautukset
