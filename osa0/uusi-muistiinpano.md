@@ -4,8 +4,11 @@ sequenceDiagram
 
     browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note
     activate server
+    Note right of browser: The browser sends data posted by user to the server using POST method
+
     server->>browser: HTML document
     deactivate server
+    Note right of browser: The server returns form data as an HTML document
 
     browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/notes
     activate server
