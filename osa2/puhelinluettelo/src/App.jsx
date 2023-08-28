@@ -5,22 +5,29 @@ const App = () => {
     { name: 'Arto Hellas' }
   ]) 
   const [newName, setNewName] = useState('')
+  const nameChecker = (name) => {
+    return persons.some(person => person.name === name)
+  }
 
   const addName = (event) => {
     event.preventDefault()
-    const nameObject = {
-      name: newName
-    }
+    nameChecker(newName)
+      ? alert(`${newName} is already added to phonebook`)
+      : (() => {
+        const nameObject = {
+          name: newName
+        }
 
-    setPersons(persons.concat(nameObject))
-    setNewName('')
+      setPersons(persons.concat(nameObject))
+      setNewName('')
+      })()
   }
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
   }
 
-  return (
+return (
     <div>
       <h2>Phonebook</h2>
       <form>
