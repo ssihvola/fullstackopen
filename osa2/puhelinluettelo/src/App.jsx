@@ -24,11 +24,40 @@ const App = () => {
     return persons.some(person => person.name === name)
   }
 
+  const numberChecker = (number) => {
+    return persons.some(person => person.number === number)
+  }
+
   const addName = (event) => {
     event.preventDefault()
-    nameChecker(newName)
-      ? alert(`${newName} is already added to phonebook`)
-      : (() => {
+
+    const nameExists = nameChecker(newName)
+    const numberExists = numberChecker(newNumber)
+
+    if (nameExists && numberExists) {
+      alert(`${newName} is already added to phonebook`)
+    } else if (nameExists) {
+      const confirmed = window.confirm(
+        `${newName} is already added to phonebook. replace the old number?`
+      )
+
+      if (confirmed) {
+        const existingPerson = persons.find((person) => person.name === newName)
+        const updatedPerson = {...existingPerson, number: newNumber}
+
+        phoneBookService
+          .updatePerson(existingPerson.id, updatedPerson)
+          .then((response) => {
+            setPersons(
+              persons.map((person) =>
+                person.id === existingPerson.id ? response.data : person
+              )
+            )
+            setNewName('')
+            setNewNumber('')
+          })
+      }
+    } else {
         const nameObject = {
           name: newName,
           number: newNumber
@@ -41,7 +70,7 @@ const App = () => {
           setNewName('')
           setNewNumber('')  
       })
-    })()
+    }
   }
 
   const removeName = (id, name) => {
