@@ -3,6 +3,7 @@ import axios from 'axios'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import Button from './components/Button'
 import phoneBookService from './services/phonebook'
 
 const App = () => {
@@ -36,11 +37,21 @@ const App = () => {
       phoneBookService    
         .create(nameObject)    
         .then(response => {  
-          setPersons(persons.concat(nameObject))
+          setPersons(persons.concat(response.data))
           setNewName('')
-          setNewNumber('')    
+          setNewNumber('')  
       })
     })()
+  }
+
+  const removeName = (id, name) => {
+    if (window.confirm(`Delete ${name}?`)) {
+      phoneBookService
+        .removePerson(id)
+        .then(() => {
+          setPersons(persons.filter(person => person.id !== id))
+        })
+    }
   }
 
   const handleNameChange = (event) => {
@@ -67,10 +78,10 @@ return (
       <h2>add a new</h2>
         <PersonForm text="name:" inputValue={newName} eventTarget={handleNameChange} />
         <PersonForm text="number:" inputValue={newNumber} eventTarget={handleNumberChange} />
-        <div><button onClick={addName}>add</button></div>
+        <Button buttonAction={addName} buttonText="add" />
 
       <h2>Numbers</h2>
-        <Persons personArray={filteredPersons} />
+        <Persons personArray={filteredPersons} removeName={removeName} /> 
     </div>
   )
 }
