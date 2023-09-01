@@ -3,6 +3,7 @@ import axios from 'axios'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import phoneBookService from './services/phonebook'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -11,8 +12,8 @@ const App = () => {
   const [searchTerm, setSearchTerm] = useState('')
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
+    phoneBookService
+      .getAll()
       .then(response => {
         setPersons(response.data)
       })
@@ -32,18 +33,14 @@ const App = () => {
           number: newNumber
         }
 
-      axios    
-        .post('http://localhost:3001/persons', nameObject)    
-        .then((response) => {  
+      phoneBookService    
+        .create(nameObject)    
+        .then(response => {  
           setPersons(persons.concat(nameObject))
           setNewName('')
           setNewNumber('')    
-          console.log(response)    
       })
-      .catch((error) => {
-        console.error('Error adding name:', error);
-      });
-    })();
+    })()
   }
 
   const handleNameChange = (event) => {
