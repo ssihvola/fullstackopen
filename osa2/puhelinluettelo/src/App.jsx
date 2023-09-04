@@ -66,6 +66,14 @@ const App = () => {
               setNotificationMessage(null)
             }, 5000)
           })
+          .catch(error  => {
+            setNotificationMessage(
+              `Information of ${existingPerson.name} has already been removed from the server`
+            )
+            setTimeout(() => {
+              setNotificationMessage(null)
+            }, 5000)
+          })
       }
     } else {
         const nameObject = {
