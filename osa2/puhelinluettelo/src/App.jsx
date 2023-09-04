@@ -4,6 +4,7 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import Button from './components/Button'
+import Notification from './components/Notification'
 import phoneBookService from './services/phonebook'
 
 const App = () => {
@@ -11,6 +12,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
+  const [notificationMessage, setNotificationMessage] = useState(null)
 
   useEffect(() => {
     phoneBookService
@@ -56,6 +58,14 @@ const App = () => {
             setNewName('')
             setNewNumber('')
           })
+          .then(notification => {
+            setNotificationMessage(
+              `Phone number updated`
+            )
+            setTimeout(() => {
+              setNotificationMessage(null)
+            }, 5000)
+          })
       }
     } else {
         const nameObject = {
@@ -70,6 +80,14 @@ const App = () => {
           setNewName('')
           setNewNumber('')  
       })
+        .then(notification => {
+          setNotificationMessage(
+            `Added ${newName}`
+          )
+          setTimeout(() => {
+            setNotificationMessage(null)
+          }, 5000)
+        })
     }
   }
 
@@ -79,6 +97,14 @@ const App = () => {
         .removePerson(id)
         .then(() => {
           setPersons(persons.filter(person => person.id !== id))
+        })
+        .then(notification => {
+          setNotificationMessage(
+            `Removed ${name}`
+          )
+          setTimeout(() => {
+            setNotificationMessage(null)
+          }, 5000)
         })
     }
   }
@@ -102,8 +128,8 @@ const App = () => {
 return (
     <div>
       <h1>Phonebook</h1>
+      <Notification message={notificationMessage} />
         <Filter value={searchTerm} onChange={handleSearchChange} />
-
       <h2>add a new</h2>
         <PersonForm text="name:" inputValue={newName} eventTarget={handleNameChange} />
         <PersonForm text="number:" inputValue={newNumber} eventTarget={handleNumberChange} />
