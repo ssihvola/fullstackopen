@@ -51,6 +51,14 @@ app.post('/api/persons', (req, res) => {
     })
   }
 
+  const nameChecker = persons.filter(person => person.name === body.name)
+
+  if (nameChecker.length > 0) {
+    return res.status(400).json({
+      error: 'name already in phonebook'
+    })
+  }
+
   const person = {
     id: generateId(),
     name: body.name,
