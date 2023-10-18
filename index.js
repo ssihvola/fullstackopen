@@ -13,7 +13,6 @@ app.use((req, res, next) => {
   } else {
     morgan('tiny')(req, res, next)
   }
-  next()
 })
 
 let persons = [
