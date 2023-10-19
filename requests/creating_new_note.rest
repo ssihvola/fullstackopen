@@ -1,0 +1,7 @@
+POST https://full-stack-openin-tehtavat-3-10-ja-3-11.onrender.com/
+Content-Type: application/json
+
+{
+    "name": "arto hellas",
+    "number": "040-123456"
+}

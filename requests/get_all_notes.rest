@@ -1,7 +1,1 @@
-POST http://localhost:3001/api/persons
-Content-Type: application/json
-
-{
-    "name": "arto hellas",
-    "number": "040-123456"
-}
+GET https://full-stack-openin-tehtavat-3-10-ja-3-11.onrender.com/
