@@ -1,7 +1,7 @@
-POST https://full-stack-openin-tehtavat-3-10-ja-3-11.onrender.com/
+POST https://full-stack-openin-tehtavat-3-10-ja-3-11.onrender.com/api/persons
 Content-Type: application/json
 
 {
-    "name": "arto hellas",
-    "number": "040-123456"
+    "name": "asdfgh",
+    "number": "040-123356"
 }
