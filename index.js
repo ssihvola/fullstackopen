@@ -2,6 +2,9 @@ const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
 const app = express()
+require('dotenv').config()
+
+const Person = require('./models/person')
 
 morgan.token('body', (req, res) => JSON.stringify(req.body))
 
@@ -46,7 +49,9 @@ const info = `<p>phonebook has info of ${persons.length} people</p>
     <p>${now}</p>`
 
 app.get('/api/persons', (req, res) => {
-  res.json(persons)
+  Person.find({}).then(persons => {
+    res.json(persons)
+  })
 })
 
 const generateId = () => {
@@ -81,7 +86,9 @@ app.post('/api/persons', (req, res) => {
 
   persons = persons.concat(person)
 
-  res.json(person)
+  person.save().then(savedPerson => {
+    res.json(savedPerson)
+  })
 })
 
 app.get('/api/persons/:id', (req, res) => {
@@ -89,7 +96,9 @@ app.get('/api/persons/:id', (req, res) => {
   const person = persons.find(person => person.id === id)
 
   if (person) {
-    res.json(person)
+    Person.findById(req.params.id).then(person => {
+      res.json(person)
+    })
   } else {
     res.status(404).end()
   }
