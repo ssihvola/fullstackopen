@@ -114,10 +114,16 @@ app.get('/info', (req, res) => {
   res.send(info)
 })
 
-app.delete('/api/persons/:id', (req, res) => {
+app.delete('/api/persons/:id', (req, res, next) => {
   const id = Number(req.params.id)
   persons = persons.filter(person => person.id !== id)
   res.status(204).end()
+
+  Person.findByIdAndRemove(req.params.id)
+    .then(result => {
+      res.status(204).end()
+    })
+    .catch(error => next(error))
 })
 
 const PORT = process.env.PORT || 3001
