@@ -6,6 +6,20 @@ require('dotenv').config()
 
 const Person = require('./models/person')
 
+/* rekisteröidään virheidenkäsittelijämiddleware muiden middlewarejen rekisteröinnin jälkeen */
+const errorHandler = (error, request, response, next) => {
+  /* konsoliin tulostuu virheoliosta viestiosuus */
+  console.error(error.message)
+
+  /* jos on virheellinen olio-id, lähetetään pyynnön tehneelle selaimelle vastaus */
+  if (error.name === 'CastError') {
+    return res.status(400).send({ error: 'malformatted id' })
+  }
+
+  /* siirretään next-funktiolla virheen käsittely expressin oletusarvosen virheidenkäsittelijän hoidettavaksi */
+  next(error)
+}
+
 morgan.token('body', (req, res) => JSON.stringify(req.body))
 
 app.use(express.json())
@@ -20,27 +34,10 @@ app.use((req, res, next) => {
   }
 })
 
+/* virheidenkäsittelijä käyttöön muiden middlewarejen rekisteröinnin jälkeen */
+app.use(errorHandler)
+
 let persons = [
-  {
-    id: 1,
-    name: "arto hellas",
-    number: "040-123456"
-  },
-  {
-    id: 2,
-    name: "ada lovelace",
-    number: "39-44-5323523"
-  },
-  {
-    id: 3,
-    name: "dan abramov",
-    number: "12-234-34353535"
-  },
-  {
-    id: 4,
-    name: "mary poppendick",
-    number: "390-23234-234234"
-  }
 ]
 
 const now = new Date()
@@ -97,17 +94,20 @@ app.post('/api/persons', (req, res) => {
   })
 })
 
-app.get('/api/persons/:id', (req, res) => {
+app.get('/api/persons/:id', (req, res, next) => {
   const id = Number(req.params.id)
   const person = persons.find(person => person.id === id)
 
-  if (person) {
-    Person.findById(req.params.id).then(person => {
-      res.json(person)
+  Person.findById(req.params.id)
+    .then(person => {
+      if (person) {
+        res.json(person)
+      } else {
+        res.status(404).end()
+      } 
     })
-  } else {
-    res.status(404).end()
-  }
+    /* siirretään virheenkäsittely middlewaren hoidettavaksi */
+    .catch(error => next(error))
 })
 
 app.get('/info', (req, res) => {
@@ -123,6 +123,7 @@ app.delete('/api/persons/:id', (req, res, next) => {
     .then(result => {
       res.status(204).end()
     })
+    /** virheidenkäsittely middlewarelle */
     .catch(error => next(error))
 })
 
