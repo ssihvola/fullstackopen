@@ -1,7 +1,7 @@
 const express = require('express')
+const app = express()
 const morgan = require('morgan')
 const cors = require('cors')
-const app = express()
 require('dotenv').config()
 
 const Person = require('./models/person')
@@ -20,11 +20,14 @@ const errorHandler = (error, request, response, next) => {
   next(error)
 }
 
-morgan.token('body', (req, res) => JSON.stringify(req.body))
+const unknownEndpoint = (req, res) => {
+  res.status(404).send({ error: 'unknown endpoint '})
+}
 
-app.use(express.json())
-app.use(express.static('dist'))
 app.use(cors())
+app.use(express.json())
+
+morgan.token('body', (req, res) => JSON.stringify(req.body))
 
 app.use((req, res, next) => {
   if (req.method === 'POST') {
@@ -34,29 +37,15 @@ app.use((req, res, next) => {
   }
 })
 
-/* virheidenkäsittelijä käyttöön muiden middlewarejen rekisteröinnin jälkeen */
-app.use(errorHandler)
+app.use(express.static('dist'))
 
-let persons = [
-]
-
-const now = new Date()
-
-const info = `<p>phonebook has info of ${persons.length} people</p>
-    <p>${now}</p>`
+let persons = []
 
 app.get('/api/persons', (req, res) => {
   Person.find({}).then(persons => {
     res.json(persons)
   })
 })
-
-const generateId = () => {
-  const min = 1
-  const max = 100000000
-  const newId = Math.floor(Math.random() * (max - min + 1)) + min
-  return newId
-}
 
 app.post('/api/persons', (req, res) => {
   const body = req.body
@@ -104,8 +93,22 @@ app.get('/api/persons/:id', (req, res, next) => {
     .catch(error => next(error))
 })
 
+const generateId = () => {
+  const min = 1
+  const max = 100000000
+  const newId = Math.floor(Math.random() * (max - min + 1)) + min
+  return newId
+}
+
 app.get('/info', (req, res) => {
-  res.send(info)
+  Person.find({}).then(persons => {
+    const personList = persons
+    const now = new Date()
+    const info = `<p>phonebook has info of ${personList.length} people</p>
+    <p>${now}</p>`
+    res.send(info)
+  })
+  .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (req, res, next) => {
@@ -136,6 +139,10 @@ app.put('/api/persons/:id', (req, res, next) => {
     })
     .catch(error => next(error))
 })
+
+app.use(unknownEndpoint)
+/* virheidenkäsittelijä käyttöön vasta lopuksi */
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
