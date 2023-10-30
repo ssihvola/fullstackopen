@@ -1,0 +1,6 @@
+PUT http://localhost:3001/api/persons/6537a5be1b505d47c5534b33
+
+{
+    "name": "jari kulmala",
+    "number": "040-123356"
+}
