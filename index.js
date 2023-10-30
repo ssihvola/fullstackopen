@@ -61,7 +61,12 @@ const generateId = () => {
 app.post('/api/persons', (req, res) => {
   const body = req.body
 
-  /* if (!body.name || !body.number) {
+  const person = new Person({
+    name: body.name,
+    number: body.number,
+  })
+
+  if (!body.name || !body.number) {
     return res.status(400).json({
       error: 'content missing'
     })
@@ -75,18 +80,7 @@ app.post('/api/persons', (req, res) => {
     })
   }
 
-  const person = {
-    id: generateId(),
-    name: body.name,
-    number: body.number
-  }
-
-  persons = persons.concat(person) */
-
-  const person = new Person({
-    name: body.name,
-    number: body.number,
-  })
+  persons = persons.concat(person)
 
   person.save().then(savedPerson => {
     console.log(`added ${person.name} to phonebook`)
@@ -124,6 +118,22 @@ app.delete('/api/persons/:id', (req, res, next) => {
       res.status(204).end()
     })
     /** virheidenkäsittely middlewarelle */
+    .catch(error => next(error))
+})
+
+/* vaihdetaan olemassaolevan henkilön puhelinnumero */
+app.put('/api/persons/:id', (req, res, next) => {
+  const body = req.body
+  
+  const person = {
+    name: body.name,
+    number: body.number
+  }
+
+  Person.findByIdAndUpdate(req.params.id, person, { new: true })
+    .then(updatedPerson => {
+      res.json(updatedPerson)
+    })
     .catch(error => next(error))
 })
 
