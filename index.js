@@ -7,13 +7,15 @@ require('dotenv').config()
 const Person = require('./models/person')
 
 /* rekisteröidään virheidenkäsittelijämiddleware muiden middlewarejen rekisteröinnin jälkeen */
-const errorHandler = (error, request, response, next) => {
+const errorHandler = (error, req, res, next) => {
   /* konsoliin tulostuu virheoliosta viestiosuus */
   console.error(error.message)
 
   /* jos on virheellinen olio-id, lähetetään pyynnön tehneelle selaimelle vastaus */
   if (error.name === 'CastError') {
     return res.status(400).send({ error: 'malformatted id' })
+  } else if (error.name === 'ValidationError') {
+    return res.status(400).json({ error: error.message })
   }
 
   /* siirretään next-funktiolla virheen käsittely expressin oletusarvosen virheidenkäsittelijän hoidettavaksi */
@@ -47,7 +49,7 @@ app.get('/api/persons', (req, res) => {
   })
 })
 
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
   const body = req.body
 
   const person = new Person({
@@ -71,10 +73,12 @@ app.post('/api/persons', (req, res) => {
 
   persons = persons.concat(person)
 
-  person.save().then(savedPerson => {
-    console.log(`added ${person.name} to phonebook`)
-    res.json(savedPerson)
-  })
+  person.save()
+    .then(savedPerson => {
+      console.log(`added ${person.name} to phonebook`)
+      res.json(savedPerson)
+    })
+    .catch(error => next(error))
 })
 
 app.get('/api/persons/:id', (req, res, next) => {
@@ -126,14 +130,13 @@ app.delete('/api/persons/:id', (req, res, next) => {
 
 /* vaihdetaan olemassaolevan henkilön puhelinnumero */
 app.put('/api/persons/:id', (req, res, next) => {
-  const body = req.body
+  const { name, number } = req.body
   
-  const person = {
-    name: body.name,
-    number: body.number
-  }
-
-  Person.findByIdAndUpdate(req.params.id, person, { new: true })
+  Person.findByIdAndUpdate(
+    req.params.id, 
+    { name, number }, 
+    { new: true, runValidators: true, context: 'query' }
+  )
     .then(updatedPerson => {
       res.json(updatedPerson)
     })
