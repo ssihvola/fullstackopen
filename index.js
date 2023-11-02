@@ -63,11 +63,7 @@ app.post('/api/persons', (req, res, next) => {
     return res.status(400).json({
       error: 'name already in phonebook'
     })
-  } else if (body.number.length < 8) {
-    return res.status(400).json({
-      error: 'phone number must be at least 8 characters'
-    })
-  }
+  } 
 
   persons = persons.concat(person)
 
