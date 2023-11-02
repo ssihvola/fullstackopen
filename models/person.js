@@ -19,7 +19,15 @@ const personSchema = new mongoose.Schema({
 		minlength: 3,
 		required: true
 	},
-	number: String, 
+	number: {
+		type: String,
+		minlength: 8,
+		validate: {
+			validator: function(v) { return v[2] === '-' || v[3] === '-' },
+			message: 'must start with 2 or 3 numbers and hyphen'
+		},
+		required: true
+	}
 })
 
 personSchema.set('toJSON', {

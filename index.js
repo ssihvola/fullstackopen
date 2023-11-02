@@ -6,19 +6,15 @@ require('dotenv').config()
 
 const Person = require('./models/person')
 
-/* rekisteröidään virheidenkäsittelijämiddleware muiden middlewarejen rekisteröinnin jälkeen */
 const errorHandler = (error, req, res, next) => {
-  /* konsoliin tulostuu virheoliosta viestiosuus */
   console.error(error.message)
 
-  /* jos on virheellinen olio-id, lähetetään pyynnön tehneelle selaimelle vastaus */
   if (error.name === 'CastError') {
     return res.status(400).send({ error: 'malformatted id' })
   } else if (error.name === 'ValidationError') {
     return res.status(400).json({ error: error.message })
   }
 
-  /* siirretään next-funktiolla virheen käsittely expressin oletusarvosen virheidenkäsittelijän hoidettavaksi */
   next(error)
 }
 
@@ -57,19 +53,17 @@ app.post('/api/persons', (req, res, next) => {
     number: body.number,
   })
 
+  const nameChecker = persons.filter(person => person.name === body.name)
+
   if (!body.name || !body.number) {
     return res.status(400).json({
       error: 'content missing'
     })
-  }
-
-  const nameChecker = persons.filter(person => person.name === body.name)
-
-  if (nameChecker.length > 0) {
+  } else if (nameChecker.length > 0) {
     return res.status(400).json({
       error: 'name already in phonebook'
     })
-  }
+  } 
 
   persons = persons.concat(person)
 
@@ -93,7 +87,6 @@ app.get('/api/persons/:id', (req, res, next) => {
         res.status(404).end()
       } 
     })
-    /* siirretään virheenkäsittely middlewaren hoidettavaksi */
     .catch(error => next(error))
 })
 
@@ -124,11 +117,9 @@ app.delete('/api/persons/:id', (req, res, next) => {
     .then(result => {
       res.status(204).end()
     })
-    /** virheidenkäsittely middlewarelle */
     .catch(error => next(error))
 })
 
-/* vaihdetaan olemassaolevan henkilön puhelinnumero */
 app.put('/api/persons/:id', (req, res, next) => {
   const { name, number } = req.body
   
@@ -144,7 +135,6 @@ app.put('/api/persons/:id', (req, res, next) => {
 })
 
 app.use(unknownEndpoint)
-/* virheidenkäsittelijä käyttöön vasta lopuksi */
 app.use(errorHandler)
 
 const PORT = process.env.PORT || 3001
