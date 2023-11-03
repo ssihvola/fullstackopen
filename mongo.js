@@ -15,7 +15,7 @@ mongoose.connect(url)
 
 const personSchema = new mongoose.Schema({
   name: String,
-  number: String, 
+  number: String,
 })
 
 const Person = mongoose.model('Person', personSchema)
@@ -26,7 +26,7 @@ const person = new Person({
 })
 
 if (process.argv.length > 3) {
-  person.save().then(result => {
+  person.save().then(() => {
     console.log(`added ${person.name} number ${person.number} to phonebook`)
     mongoose.connection.close()
   })
