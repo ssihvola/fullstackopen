@@ -19,13 +19,13 @@ const errorHandler = (error, req, res, next) => {
 }
 
 const unknownEndpoint = (req, res) => {
-  res.status(404).send({ error: 'unknown endpoint '})
+  res.status(404).send({ error: 'unknown endpoint ' })
 }
 
 app.use(cors())
 app.use(express.json())
 
-morgan.token('body', (req, res) => JSON.stringify(req.body))
+morgan.token('body', (req) => JSON.stringify(req.body))
 
 app.use((req, res, next) => {
   if (req.method === 'POST') {
@@ -63,7 +63,7 @@ app.post('/api/persons', (req, res, next) => {
     return res.status(400).json({
       error: 'name already in phonebook'
     })
-  } 
+  }
 
   persons = persons.concat(person)
 
@@ -76,36 +76,27 @@ app.post('/api/persons', (req, res, next) => {
 })
 
 app.get('/api/persons/:id', (req, res, next) => {
-  const id = Number(req.params.id)
-  const person = persons.find(person => person.id === id)
-
   Person.findById(req.params.id)
     .then(person => {
       if (person) {
         res.json(person)
       } else {
         res.status(404).end()
-      } 
+      }
     })
     .catch(error => next(error))
 })
 
-const generateId = () => {
-  const min = 1
-  const max = 100000000
-  const newId = Math.floor(Math.random() * (max - min + 1)) + min
-  return newId
-}
-
-app.get('/info', (req, res) => {
+app.get('/info', (req, res, next) => {
   Person.find({}).then(persons => {
     const personList = persons
     const now = new Date()
-    const info = `<p>phonebook has info of ${personList.length} people</p>
-    <p>${now}</p>`
+    const info =
+      `<p>phonebook has info of ${personList.length} people</p>
+      <p>${now}</p>`
     res.send(info)
   })
-  .catch(error => next(error))
+    .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (req, res, next) => {
@@ -114,7 +105,7 @@ app.delete('/api/persons/:id', (req, res, next) => {
   res.status(204).end()
 
   Person.findByIdAndRemove(req.params.id)
-    .then(result => {
+    .then(() => {
       res.status(204).end()
     })
     .catch(error => next(error))
@@ -122,10 +113,10 @@ app.delete('/api/persons/:id', (req, res, next) => {
 
 app.put('/api/persons/:id', (req, res, next) => {
   const { name, number } = req.body
-  
+
   Person.findByIdAndUpdate(
-    req.params.id, 
-    { name, number }, 
+    req.params.id,
+    { name, number },
     { new: true, runValidators: true, context: 'query' }
   )
     .then(updatedPerson => {
