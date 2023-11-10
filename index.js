@@ -1,7 +1,4 @@
 const http = require('http')
-require('dotenv').config()
-const express = require('express')
-const cors = require('cors')
 const mongoose = require('mongoose')
 const app = require('./app')
 const config = require('./utils/config')
@@ -15,9 +12,6 @@ const blogSchema = mongoose.Schema({
 })
 
 const Blog = mongoose.model('Blog', blogSchema)
-
-app.use(cors())
-app.use(express.json())
 
 app.get('/api/blogs', (request, response) => {
   Blog
