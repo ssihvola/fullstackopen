@@ -2,7 +2,7 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-  "title": "ginnusen snagari",
+  "title": "chili äijä koira muija vittu",
   "author": "jari kulmala",
   "url": "http://ginnunen.blogspot.com",
   "likes": 2
