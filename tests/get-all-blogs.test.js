@@ -16,6 +16,11 @@ test('right amount of json-blogs', async () => {
   expect(response.body).toHaveLength(4)
 })
 
+test('id field is called id', async () => {
+  const response = await api.get('/api/blogs')
+  expect(response.body[0].id).toBeDefined()
+})
+
 afterAll(async () => {
   await mongoose.connection.close()
 })
