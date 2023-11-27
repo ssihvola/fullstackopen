@@ -1,9 +1,9 @@
-POST http://localhost:3003/api/blogs 
+DELETE http://localhost:3003/api/blogs 
 Content-Type: application/json
 
 {
-  "title": "chili äijä koira muija vittu",
-  "author": "jari kulmala",
+  "title": "email-gate",
+  "author": "jari kulmala-kinnunen",
   "url": "http://ginnunen.blogspot.com",
-  "likes": 2
+  "likes": 0
 }
