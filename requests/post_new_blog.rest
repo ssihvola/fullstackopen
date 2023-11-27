@@ -1,9 +1,8 @@
-DELETE http://localhost:3003/api/blogs 
+POST http://localhost:3003/api/blogs 
 Content-Type: application/json
 
 {
   "title": "email-gate",
   "author": "jari kulmala-kinnunen",
-  "url": "http://ginnunen.blogspot.com",
-  "likes": 0
+  "url": "http://ginnunen.blogspot.com"
 }

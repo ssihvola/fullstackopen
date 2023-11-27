@@ -74,6 +74,26 @@ test('post request increases bloglist by one & title is correct', async () => {
   )
 })
 
+test('likes: 0 if no value is given', async () => {
+  const newBlog = {
+    "title": "email-gate",
+    "author": "jari kulmala-kinnunen",
+    "url": "http://ginnunen.blogspot.com",
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const response = await api.get('/api/blogs')
+
+  //likes ei ole vielä määritelty, joten testi epäonnistuu
+
+  expect(response.body[2].likes).toBe(0)
+})
+
 afterAll(async () => {
   await mongoose.connection.close()
 }) 
