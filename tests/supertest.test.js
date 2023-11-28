@@ -4,8 +4,6 @@ const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
 
-// post-pyyntöön vielä tarkistus, että blogin sisältö on oikeanlainen
-
 const initialBlogs = [
   {
     _id: "5a422a851b54a676234d17f7",
@@ -89,9 +87,18 @@ test('likes: 0 if no value is given', async () => {
 
   const response = await api.get('/api/blogs')
 
-  //likes ei ole vielä määritelty, joten testi epäonnistuu
-
   expect(response.body[2].likes).toBe(0)
+})
+
+test('400 returned if title or url is missing', async () => {
+  const newBlog = {
+    "author": "jari kulmala-kinnunen",
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
 })
 
 afterAll(async () => {
