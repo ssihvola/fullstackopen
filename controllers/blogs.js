@@ -10,13 +10,13 @@ blogsRouter.get('/', async (request, response) => {
 blogsRouter.post('/', async (request, response, next) => {
   const blog = new Blog(request.body)
 
-  console.log(blog.likes)
-
   if (blog.likes === undefined) {
     blog.likes = 0
+  } 
+  
+  if (blog.title === undefined || blog.url === undefined) {
+    return response.status(400).end()
   }
-
-  console.log(blog.likes)
 
   try {
     const savedBlog = await blog.save()
