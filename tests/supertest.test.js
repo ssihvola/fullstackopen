@@ -101,6 +101,21 @@ test('400 returned if title or url is missing', async () => {
     .expect(400)
 })
 
+test('it is possible to get a single blog', async () => {
+  await api
+    .get(`/api/blogs/${initialBlogs[0]._id}`)
+    .expect(200)
+})
+
+test('it is possible to delete a blog', async () => {
+  await api
+    .delete (`/api/blogs/${initialBlogs[0]._id}`)
+    .expect(204)
+
+  const response = await api.get('/api/blogs')
+  expect(response.body).toHaveLength(initialBlogs.length - 1)
+})
+
 afterAll(async () => {
   await mongoose.connection.close()
 }) 
