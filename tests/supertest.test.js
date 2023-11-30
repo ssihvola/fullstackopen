@@ -116,6 +116,18 @@ test('it is possible to delete a blog', async () => {
   expect(response.body).toHaveLength(initialBlogs.length - 1)
 })
 
+test('it is possible to increase likes of a blog by one', async () => {
+  const response = await api.get(`/api/blogs/${initialBlogs[0]._id}`)
+  response.body.likes++
+
+  const updatedResponse = await api
+    .put(`/api/blogs/${initialBlogs[0]._id}`)
+    .send(response.body)
+    .expect(200)
+
+  expect(updatedResponse.body.likes).toBe(initialBlogs[0].likes + 1)
+}) 
+
 afterAll(async () => {
   await mongoose.connection.close()
 }) 
