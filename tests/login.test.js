@@ -4,8 +4,16 @@ const app = require('../app')
 const api = supertest(app)
 const User = require('../models/user')
 
+const initialUser = {
+  "username": "abcdefg",
+  "name": "String",
+  "password": "123456"
+}
+
 beforeEach(async () => {
   await User.deleteMany({})
+  let userObject = new User(initialUser)
+  await userObject.save()
 })
 
 describe('creating new users', () => {
@@ -41,9 +49,9 @@ describe('creating new users', () => {
 
   test('username and password with 3 characters pass', async () => {
     const newUser = {
-      "username": "ddd",
+      "username": "abc",
       "name": "String",
-      "password": "111"
+      "password": "123"
     }
 
     await api
@@ -53,18 +61,10 @@ describe('creating new users', () => {
   })
 
   test('not possible to create two users with same username', async () => {
-    const initialUser = {
-      "username": "ddd",
-      "name": "String",
-      "password": "111"
-    }
-
-    await api.post('/api/users').send(initialUser)
-
     const newUser = {
-      "username": "ddd",
+      "username": "abcdefg",
       "name": "String",
-      "password": "111"
+      "password": "123456"
     }
 
     const response = await api
@@ -74,6 +74,12 @@ describe('creating new users', () => {
 
     expect(response.body.error).toBe('username already exists')
   })
+
+describe('user info', () => {
+  test('blog has info about user who added it', async () => {
+
+  })
+})
 })
 
 afterAll(async () => {
