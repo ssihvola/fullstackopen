@@ -8,7 +8,7 @@ blogsRouter.get('/', async (request, response) => {
   response.json(blogs)
 })
 
-blogsRouter.post('/', async (request, response, next) => {
+blogsRouter.post('/', async (request, response) => {
   const body = request.body
   const decodedToken = jwt.verify(request.token, process.env.SECRET)
   if (!decodedToken.id) {
@@ -48,8 +48,18 @@ blogsRouter.get('/:id', async (request, response) => {
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
-  await Blog.findByIdAndDelete(request.params.id)
-  response.status(204).end()
+  const blog = await Blog.findById(request.params.id)
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: 'token invalid' })
+  }
+  if ( blog.user.toString() === decodedToken.id.toString() ) {
+    await Blog.findByIdAndDelete(request.params.id)
+    console.log('blog deleted')
+    return response.status(204).end()
+  } else {
+    return response.status(403).json({ error: 'forbidden' })
+  }
 })
 
 blogsRouter.put('/:id', async (request, response, next) => {
