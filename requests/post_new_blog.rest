@@ -3,7 +3,7 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImZmZmYiLCJpZCI6IjY1NzQ0ZDBhNTQwMjkxYWEzNzNhNTE4YiIsImlhdCI6MTcwMjIxMTY1MX0.CnPsZLLhw0C9bBCajbmtqAXnNH12rHZYUQGmSITWswM
 
 {
-  "title": "React pattfesrns",
+  "title": "token",
   "author": "Michael Chan",
   "url": "https://reactpatterns.com/",
   "likes": 7
