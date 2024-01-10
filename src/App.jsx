@@ -58,7 +58,7 @@ const App = () => {
         'loggedBlogappUser', JSON.stringify(user)
       )
       blogService.setToken(user.token)
-      console.log('logging in with', username, password)
+      console.log('logging in with', username)
       setUser(user)
       setUsername('')
       setPassword('')
@@ -132,7 +132,7 @@ const App = () => {
       <div>{blogForm()}</div>
 
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} user={user} />
       )}
     </div>
   )
