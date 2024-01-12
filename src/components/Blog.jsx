@@ -3,7 +3,7 @@ import Button from './Button'
 
 import blogService from '../services/blogs'
 
-const Blog = ({ blog, setUpdate }) => {
+const Blog = ({ blog, user, setUpdate }) => {
   const [visible, setVisible] = useState(false)
 
   const hideWhenVisible = { display: visible ? 'none' : '' }
@@ -18,7 +18,17 @@ const Blog = ({ blog, setUpdate }) => {
     const likes = blog.likes + 1
     const updatedBlog = { ...blog, likes }
     await blogService.update(updatedBlog)
-    setUpdate(updatedBlog)
+    setUpdate((prevUpdate) => prevUpdate + 1)
+  }
+
+  const handleRemove = async (event) => {
+    event.preventDefault()
+
+    if (window.confirm(`delete blog ${blog.name} by ${blog.author}`)) {
+      blogService.setToken(user.token)
+      await blogService.remove(blog.id, user.token)
+      setUpdate((prevUpdate) => prevUpdate + 1)
+    }
   }
 
   return (
@@ -35,6 +45,7 @@ const Blog = ({ blog, setUpdate }) => {
           <Button buttonAction={handleLike} buttonText="like" />
         </div>
         <div>{blog.user.name}</div>
+        <Button buttonAction={handleRemove} buttonText="remove" />
       </div>
     </div>
 )}
