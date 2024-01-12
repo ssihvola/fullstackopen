@@ -132,12 +132,11 @@ const App = () => {
 
       <div>{blogForm()}</div>
 
-      {blogs.map(blog =>
-        <Blog 
-          key={blog.id} 
-          blog={blog}
-          setUpdate={setUpdate}
-        />
+      {blogs
+        .sort((a, b) => a.likes - b.likes)
+        .map(blog =>
+          <Blog key={blog.id} blog={blog} setUpdate={setUpdate}
+          />
       )}
     </div>
   )
