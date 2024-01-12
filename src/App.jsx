@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
+import Button from './components/Button'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 
@@ -15,13 +16,14 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState('')
   const [addedBlogMessage, setAddedBlogMessage] = useState('')
   const [user, setUser] = useState(null)
+  const [update, setUpdate] = useState(null)
   const blogFormRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
     )  
-  }, [])
+  }, [update])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -77,10 +79,6 @@ const App = () => {
     setUser(null)
   }
 
-  const logoutButton = () => (
-    <button onClick={handleLogout}>logout</button>
-  )
-
   const loginForm = () => (
     <form onSubmit={handleLogin}>
       <div>
@@ -127,7 +125,10 @@ const App = () => {
 
       <Notification message={addedBlogMessage} />
 
-      <p>{user.name} logged in {logoutButton()}</p>
+      <p>
+        {user.name} logged in
+        <Button buttonAction={handleLogout} buttonText="log out" />
+      </p>
 
       <div>{blogForm()}</div>
 
@@ -135,6 +136,7 @@ const App = () => {
         <Blog 
           key={blog.id} 
           blog={blog}
+          setUpdate={setUpdate}
         />
       )}
     </div>
