@@ -48,6 +48,6 @@ const Blog = ({ blog, user, setUpdate }) => {
         <Button buttonAction={handleRemove} buttonText="remove" />
       </div>
     </div>
-)}
+  )}
 
 export default Blog

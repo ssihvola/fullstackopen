@@ -4,7 +4,7 @@ const Notification = ({ message }) => {
   } else if (message[0] === 'a') {
     return (
       <div className="addedBlog">
-      {message}
+        {message}
       </div>
     )
   } else if (message[0] === 'w') {
@@ -13,7 +13,7 @@ const Notification = ({ message }) => {
         {message}
       </div>
     )
-  } 
+  }
 }
 
 export default Notification
