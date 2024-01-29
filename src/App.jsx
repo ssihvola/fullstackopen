@@ -80,6 +80,21 @@ const App = () => {
     setUser(null)
   }
 
+  const handleLike = async (blog) => {
+    try {
+      await blogService.update(blog)
+      setUpdate((prevUpdate) => prevUpdate + 1)
+    } catch (error) {
+      console.error('error updating likes:', error)
+    }
+  }
+
+  const handleRemove = async (blog) => {
+    blogService.setToken(user.token)
+    await blogService.remove(blog.id, user.token)
+    setUpdate((prevUpdate) => prevUpdate + 1)
+  }
+
   const loginForm = () => (
     <LoginForm
       username={username}
@@ -122,7 +137,7 @@ const App = () => {
       {blogs
         .sort((a, b) => a.likes - b.likes)
         .map(blog =>
-          <Blog key={blog.id} blog={blog} setUpdate={setUpdate} user={user}
+          <Blog key={blog.id} blog={blog} handleLike={handleLike} handleRemove={handleRemove} user={user}
           />
         )}
     </div>
