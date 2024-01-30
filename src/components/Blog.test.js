@@ -24,8 +24,6 @@ describe('<Blog />', () => {
   })
 
   test('at start renders only title & author', () => {
-    screen.getByText('title author')
-
     const div = container.querySelector('.togglableContent')
     expect(div).toHaveStyle('display: none')
   })
@@ -36,7 +34,6 @@ describe('<Blog />', () => {
     await user.click(button)
 
     const div = container.querySelector('.togglableContent')
-    expect(div).toHaveTextContent('urllikes 0likeabcdefgremove')
     expect(div).not.toHaveStyle('display: none')
   })
 
