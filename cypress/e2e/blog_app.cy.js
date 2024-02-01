@@ -43,6 +43,19 @@ describe('Blog app', function() {
       cy.get('#create-blog').click()
       cy.contains('valivalivali')
     })
+
+    it('a blog can be liked', function() {
+      cy.contains('new blog').click()
+      cy.get('#blog-title').type('valivalivali')
+      cy.get('#blog-author').type('jari')
+      cy.get('#blog-url').type('www.tykitellaan.fi')
+      cy.get('#create-blog').click()
+      cy.contains('valivalivali')
+
+      cy.contains('view').click()
+      cy.contains('like').click()
+      cy.contains('likes 1')
+    })
   })
 
 
