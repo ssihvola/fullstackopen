@@ -27,4 +27,23 @@ describe('Blog app', function() {
       cy.get('#login-button').click()
     })
   })
+
+  describe('When logged in', function() {
+    beforeEach(function() {
+      cy.get('#username').type('sihvola')
+      cy.get('#password').type('salainen')
+      cy.get('#login-button').click()
+    })
+
+    it('A blog can be created', function() {
+      cy.contains('new blog').click()
+      cy.get('#blog-title').type('valivalivali')
+      cy.get('#blog-author').type('jari')
+      cy.get('#blog-url').type('www.tykitellaan.fi')
+      cy.get('#create-blog').click()
+      cy.contains('valivalivali')
+    })
+  })
+
+
 })
