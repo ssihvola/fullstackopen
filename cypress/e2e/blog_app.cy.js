@@ -3,6 +3,7 @@ describe('Blog app', function() {
     cy.request('POST', `${Cypress.env('BACKEND')}/testing/reset`)
     // create here a user to backend
     const user = {
+      name: 'ssihvola',
       username: 'sihvola',
       password: 'salainen'
     }
@@ -71,6 +72,23 @@ describe('Blog app', function() {
       cy.contains('view').click()
       cy.contains('remove').click()
       cy.should('not.have.value', 'valivalivali')
+    })
+
+    it('another user does not see the remove button', function() {
+      cy.contains('log out').click()
+      const user = {
+        name: 'pertti',
+        username: 'röökimuija',
+        password: 'salainen'
+      }
+      cy.request('POST', `${Cypress.env('BACKEND')}/users`, user)
+
+      cy.get('#username').type('röökimuija')
+      cy.get('#password').type('salainen')
+      cy.get('#login-button').click()
+
+      cy.contains('view').click()
+      cy.should('not.have.value', 'remove')
     })
   })
 })

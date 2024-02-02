@@ -129,7 +129,7 @@ const App = () => {
 
       <p>
         {user.name} logged in
-        <Button buttonAction={handleLogout} buttonText="log out" />
+        <Button onClick={handleLogout} buttonText="log out" />
       </p>
 
       <div>{blogForm()}</div>
