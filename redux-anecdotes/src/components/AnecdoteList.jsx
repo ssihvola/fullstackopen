@@ -28,10 +28,12 @@ const AnecdoteList = () => {
     }
   })
 
+  const sortedAnecdotes = [...anecdotes]
+    .sort((a , b) => b.votes - a.votes)
+
   return (
     <div>
-      {anecdotes
-        .sort((a , b) => b.votes - a.votes)
+      {sortedAnecdotes
         .map(anecdote =>
           <Anecdote
             key={anecdote.id}
