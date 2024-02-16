@@ -1,5 +1,9 @@
 /* eslint-disable react/prop-types */
-const Notification = ({ message }) => {
+import { useNotificationValue } from "./NotificationContext"
+
+const Notification = () => {
+  const notification = useNotificationValue()
+
   const style = {
     border: 'solid',
     padding: 10,
@@ -7,9 +11,11 @@ const Notification = ({ message }) => {
     marginBottom: 5
   }
 
+  if (notification === null) return null
+
   return (
     <div style={style}>
-      {message}
+      {notification}
     </div>
   )
 }
