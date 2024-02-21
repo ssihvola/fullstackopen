@@ -1,19 +1,28 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
-const CreateNew = (props) => {
+const CreateNew = ({ addNew, setNotification } ) => {
   const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
+  const navigate = useNavigate()
 
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    props.addNew({
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    addNew({
       content,
       author,
       info,
       votes: 0
     })
+    setNotification(`a new anecdote ${content} created!`)
+    setTimeout(() => {
+      setNotification(null)
+    }, 5000)
+    setContent('')
+    setAuthor('')
+    setInfo('')
+    navigate('/')
   }
 
   return (
@@ -32,7 +41,7 @@ const CreateNew = (props) => {
           url for more info
           <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
         </div>
-        <button>create</button>
+        <button type="submit">create</button>
       </form>
     </div>
   )
