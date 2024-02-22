@@ -7,7 +7,6 @@ import About from './components/About'
 import CreateNew from './components/CreateNew'
 import Footer from './components/Footer'
 import Menu from './components/Menu'
-import Notification from './components/Notification'
 
 const App = () => {
   const [notification, setNotification] = useState(null)
