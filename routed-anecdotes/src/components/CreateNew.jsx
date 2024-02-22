@@ -1,37 +1,38 @@
-import { useState } from "react"
+import { useField } from "../hooks/index"
 import { useNavigate } from "react-router-dom"
 
 import Button from "./Button"
 
 const CreateNew = ({ addNew, setNotification } ) => {
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
+  const { reset: resetContent, ...content } = useField('text')
+  const { reset: resetAuthor, ...author } = useField('text')
+  const { reset: resetInfo, ...info } = useField('text')
   const navigate = useNavigate()
 
   const handleSubmit = (event) => {
     event.preventDefault()
+    console.log(content)
     addNew({
-      content,
+      content: content.value,
       author,
       info,
       votes: 0
     })
-    setNotification(`a new anecdote ${content} created!`)
+    setNotification(`a new anecdote ${content.value} created!`)
     setTimeout(() => {
       setNotification(null)
     }, 5000)
-    setContent('')
-    setAuthor('')
-    setInfo('')
+    resetContent()
+    resetAuthor()
+    resetInfo()
     navigate('/')
   }
 
   const handleReset = (event) => {
     event.preventDefault()
-    setContent('')
-    setAuthor('')
-    setInfo('')
+    resetContent()
+    resetAuthor()
+    resetInfo()
   }
 
   return (
@@ -40,15 +41,15 @@ const CreateNew = ({ addNew, setNotification } ) => {
       <form>
         <div>
           content
-          <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
+          <input {...content} />
         </div>
         <div>
           author
-          <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
+          <input {...author} />
         </div>
         <div>
           url for more info
-          <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
+          <input {...info} />
         </div>
         <Button onClick={handleSubmit} text="create" />
         <Button onClick={handleReset} text="reset" />
