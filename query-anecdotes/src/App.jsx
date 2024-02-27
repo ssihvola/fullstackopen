@@ -1,64 +1,67 @@
-import AnecdoteForm from "./components/AnecdoteForm";
-import Notification from "./components/Notification";
+import AnecdoteForm from './components/AnecdoteForm'
+import Notification from './components/Notification'
 import {
-  useNotificationDispatch,
-  setNotification,
-} from "./components/NotificationContext";
-import { getAnecdotes, updateAnecdote } from "./requests";
-import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query";
+	useNotificationDispatch,
+	setNotification,
+} from './components/NotificationContext'
+import { getAnecdotes, updateAnecdote } from './requests'
+import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query'
 
 const App = () => {
-  const notificationDispatch = useNotificationDispatch();
-  const queryClient = useQueryClient();
-  const result = useQuery({
-    queryKey: ["anecdotes"],
-    queryFn: getAnecdotes,
-    retry: false,
-  });
+	const notificationDispatch = useNotificationDispatch()
+	const queryClient = useQueryClient()
+	const result = useQuery({
+		queryKey: ['anecdotes'],
+		queryFn: getAnecdotes,
+		retry: false,
+	})
 
-  const updateAnecdoteMutation = useMutation({
-    mutationFn: updateAnecdote,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["anecdotes"] });
-    },
-  });
+	const updateAnecdoteMutation = useMutation({
+		mutationFn: updateAnecdote,
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ['anecdotes'] })
+		},
+	})
 
-  if (result.status === "error") {
-    return <div>anecdote service not available due to problems in server</div>;
-  }
+	if (result.status === 'error') {
+		return <div>anecdote service not available due to problems in server</div>
+	}
 
-  if (result.isLoading) {
-    return <div>loading data...</div>;
-  }
+	if (result.isLoading) {
+		return <div>loading data...</div>
+	}
 
-  const anecdotes = result.data;
+	const anecdotes = result.data
 
-  const handleVote = (anecdote) => {
-    updateAnecdoteMutation.mutate({ ...anecdote, votes: anecdote.votes + 1 });
-    notificationDispatch(setNotification(`voted anecdote ${anecdote.content}`));
-    setTimeout(() => {
-      notificationDispatch(setNotification(null));
-    }, 5000);
-  };
+	const handleVote = (anecdote) => {
+		updateAnecdoteMutation.mutate({
+			...anecdote,
+			votes: anecdote.votes + 1,
+		})
+		notificationDispatch(setNotification(`voted anecdote ${anecdote.content}`))
+		setTimeout(() => {
+			notificationDispatch(setNotification(null))
+		}, 5000)
+	}
 
-  return (
-    <div>
-      <h3>Anecdote app</h3>
+	return (
+		<div>
+			<h3>Anecdote app</h3>
 
-      <Notification />
-      <AnecdoteForm />
+			<Notification />
+			<AnecdoteForm />
 
-      {anecdotes.map((anecdote) => (
-        <div key={anecdote.id}>
-          <div>{anecdote.content}</div>
-          <div>
-            has {anecdote.votes}
-            <button onClick={() => handleVote(anecdote)}>vote</button>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-};
+			{anecdotes.map((anecdote) => (
+				<div key={anecdote.id}>
+					<div>{anecdote.content}</div>
+					<div>
+						has {anecdote.votes}
+						<button onClick={() => handleVote(anecdote)}>vote</button>
+					</div>
+				</div>
+			))}
+		</div>
+	)
+}
 
-export default App;
+export default App
