@@ -21,9 +21,7 @@ const App = () => {
   const blogFormRef = useRef()
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )
+    blogService.getAll().then((blogs) => setBlogs(blogs))
   }, [update])
 
   useEffect(() => {
@@ -37,13 +35,13 @@ const App = () => {
 
   const addBlog = (blogObject) => {
     blogFormRef.current.toggleVisibility()
-    blogService
-      .create(blogObject)
-      .then(returnedBlog => {
-        setBlogs(blogs.concat(returnedBlog))
-      })
+    blogService.create(blogObject).then((returnedBlog) => {
+      setBlogs(blogs.concat(returnedBlog))
+    })
 
-    setAddedBlogMessage(`a new blog ${blogObject.title} by ${blogObject.author} added`)
+    setAddedBlogMessage(
+      `a new blog ${blogObject.title} by ${blogObject.author} added`,
+    )
     setTimeout(() => {
       setAddedBlogMessage(null)
     }, 5000)
@@ -54,12 +52,11 @@ const App = () => {
 
     try {
       const user = await loginService.login({
-        username, password,
+        username,
+        password,
       })
 
-      window.localStorage.setItem(
-        'loggedBlogappUser', JSON.stringify(user)
-      )
+      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
       blogService.setToken(user.token)
       console.log('logging in with', username)
       setUser(user)
@@ -136,7 +133,7 @@ const App = () => {
 
       {blogs
         .sort((a, b) => b.likes - a.likes)
-        .map(blog =>
+        .map((blog) => (
           <Blog
             key={blog.id}
             blog={blog}
@@ -144,8 +141,7 @@ const App = () => {
             handleRemove={handleRemove}
             user={user}
           />
-        )
-      }
+        ))}
     </div>
   )
 }

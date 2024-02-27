@@ -27,8 +27,12 @@ const Blog = ({ blog, handleLike, handleRemove, user }) => {
     <div className="blogStyle">
       <div className="blog">
         {blog.title} {blog.author}
-        <button onClick={toggleVisibility} style={hideWhenVisible}>view</button>
-        <button onClick={toggleVisibility} style={showWhenVisible}>hide</button>
+        <button onClick={toggleVisibility} style={hideWhenVisible}>
+          view
+        </button>
+        <button onClick={toggleVisibility} style={showWhenVisible}>
+          hide
+        </button>
       </div>
       <div style={showWhenVisible} className="togglableContent">
         <div>{blog.url}</div>
@@ -37,9 +41,9 @@ const Blog = ({ blog, handleLike, handleRemove, user }) => {
           <Button onClick={addLike} buttonText="like" />
         </div>
         <div>{blog.user.name}</div>
-        {blog.user.username === user.username &&
+        {blog.user.username === user.username && (
           <Button onClick={removeBlog} buttonText="remove" />
-        }
+        )}
       </div>
     </div>
   )
