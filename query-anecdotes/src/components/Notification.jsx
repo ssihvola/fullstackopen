@@ -1,19 +1,18 @@
-/* eslint-disable react/prop-types */
-import { useNotificationValue } from "./NotificationContext";
+import { useNotificationValue } from './NotificationContext'
 
 const Notification = () => {
-  const notification = useNotificationValue();
+  const notification = useNotificationValue()
 
   const style = {
-    border: "solid",
+    border: 'solid',
     padding: 10,
     borderWidth: 1,
     marginBottom: 5,
-  };
+  }
 
-  if (notification === null) return null;
+  if (notification === null) return null
 
-  return <div style={style}>{notification}</div>;
-};
+  return <div style={style}>{notification}</div>
+}
 
-export default Notification;
+export default Notification
