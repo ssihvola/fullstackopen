@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from 'react'
+import { useDispatch } from 'react-redux'
 
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
 import Button from './components/Button'
 import Notification from './components/Notification'
+import { setNotification } from './reducers/notificationReducer'
 import Togglable from './components/Togglable'
 
 import blogService from './services/blogs'
@@ -19,6 +21,7 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [update, setUpdate] = useState(null)
   const blogFormRef = useRef()
+  const dispatch = useDispatch()
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs))
@@ -39,12 +42,13 @@ const App = () => {
       setBlogs(blogs.concat(returnedBlog))
     })
 
-    setAddedBlogMessage(
-      `a new blog ${blogObject.title} by ${blogObject.author} added`,
+    dispatch(
+      setNotification(
+        `a new blog ${blogObject.title} by ${blogObject.author} added`,
+        'success',
+        5000,
+      ),
     )
-    setTimeout(() => {
-      setAddedBlogMessage(null)
-    }, 5000)
   }
 
   const handleLogin = async (event) => {
@@ -63,10 +67,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setErrorMessage('wrong username or password')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+      dispatch(setNotification('wrong username or password', 'error', 5000))
     }
   }
 
