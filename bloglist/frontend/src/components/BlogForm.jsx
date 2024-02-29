@@ -2,6 +2,8 @@ import { useState, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { createBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
+
+import Notification from './Notification'
 import Togglable from './Togglable'
 
 const BlogForm = () => {
@@ -29,41 +31,43 @@ const BlogForm = () => {
   }
 
   return (
-    <Togglable buttonLabel="new blog" ref={ref}>
-      <div className="formDiv">
-        <h2>create new</h2>
+    <div>
+      <Togglable buttonLabel="new blog" ref={ref}>
+        <div className="formDiv">
+          <h2>create new</h2>
 
-        <form onSubmit={handleSubmit} ref={ref}>
-          <div>
-            title
-            <input
-              value={title}
-              onChange={(event) => setTitle(event.target.value)}
-              id="blog-title"
-            />
-          </div>
-          <div>
-            author
-            <input
-              value={author}
-              onChange={(event) => setAuthor(event.target.value)}
-              id="blog-author"
-            />
-          </div>
-          <div>
-            url
-            <input
-              value={url}
-              onChange={(event) => setUrl(event.target.value)}
-              id="blog-url"
-            />
-          </div>
-          <button id="create-blog" type="submit">
-            create
-          </button>
-        </form>
-      </div>
-    </Togglable>
+          <form onSubmit={handleSubmit} ref={ref}>
+            <div>
+              title
+              <input
+                value={title}
+                onChange={(event) => setTitle(event.target.value)}
+                id="blog-title"
+              />
+            </div>
+            <div>
+              author
+              <input
+                value={author}
+                onChange={(event) => setAuthor(event.target.value)}
+                id="blog-author"
+              />
+            </div>
+            <div>
+              url
+              <input
+                value={url}
+                onChange={(event) => setUrl(event.target.value)}
+                id="blog-url"
+              />
+            </div>
+            <button id="create-blog" type="submit">
+              create
+            </button>
+          </form>
+        </div>
+      </Togglable>
+    </div>
   )
 }
 

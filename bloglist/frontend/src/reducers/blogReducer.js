@@ -30,4 +30,11 @@ export const createBlog = (content) => {
   }
 }
 
+export const likeBlog = (blog) => {
+  return async dispatch => {
+    await blogService.update({ ...blog, likes: blog.likes + 1 })
+    dispatch(initializeBlogs())
+  }
+}
+
 export default blogSlice.reducer
