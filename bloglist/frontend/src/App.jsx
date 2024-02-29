@@ -5,7 +5,7 @@ import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
 import Button from './components/Button'
 import Notification from './components/Notification'
-import { initializeBlogs } from './reducers/blogReducer'
+import { initializeBlogs, likeBlog } from './reducers/blogReducer'
 import { setNotification } from './reducers/notificationReducer'
 
 import blogService from './services/blogs'
@@ -13,11 +13,9 @@ import loginService from './services/login'
 import LoginForm from './components/LoginForm'
 
 const App = () => {
-  const blogs = useSelector(state => state.blogs)
+  const blogs = useSelector((state) => state.blogs)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [errorMessage, setErrorMessage] = useState('')
-  const [addedBlogMessage, setAddedBlogMessage] = useState('')
   const [user, setUser] = useState(null)
   const [update, setUpdate] = useState(null)
   const dispatch = useDispatch()
@@ -62,50 +60,30 @@ const App = () => {
     setUser(null)
   }
 
-  const handleLike = async (blog) => {
-    try {
-      await blogService.update(blog)
-      setUpdate((prevUpdate) => prevUpdate + 1)
-    } catch (error) {
-      console.error('error updating likes:', error)
-    }
-  }
-
   const handleRemove = async (blog) => {
     blogService.setToken(user.token)
     await blogService.remove(blog.id, user.token)
     setUpdate((prevUpdate) => prevUpdate + 1)
   }
 
-  const loginForm = () => (
-    <LoginForm
-      username={username}
-      password={password}
-      handleUsernameChange={({ target }) => setUsername(target.value)}
-      handlePasswordChange={({ target }) => setPassword(target.value)}
-      handleSubmit={handleLogin}
-    />
-  )
-
   if (user === null) {
     return (
-      <div>
-        <h2>blogs</h2>
-        <Notification message={errorMessage} />
-        <div>{loginForm()}</div>
-      </div>
+      <LoginForm
+        username={username}
+        password={password}
+        handleLogin={handleLogin}
+        setUsername={({ target }) => setUsername(target.value)}
+        setPassword={({ target }) => setPassword(target.value)}
+      />
     )
   }
 
-  const sortedBlogs = [...blogs]
-    .sort((a, b) => b.likes - a.likes)
+  const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes)
 
   return (
     <div>
       <h2>blogs</h2>
-
-      <Notification message={addedBlogMessage} />
-
+      <Notification />
       <p>
         {user.name} logged in
         <Button onClick={handleLogout} buttonText="log out" />
@@ -113,16 +91,14 @@ const App = () => {
 
       <BlogForm />
 
-      {sortedBlogs
-        .map((blog) => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            handleLike={handleLike}
-            handleRemove={handleRemove}
-            user={user}
-          />
-        ))}
+      {sortedBlogs.map((blog) => (
+        <Blog
+          key={blog.id}
+          blog={blog}
+          handleRemove={handleRemove}
+          user={user}
+        />
+      ))}
     </div>
   )
 }
