@@ -1,24 +1,22 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { initializeBlogs, createBlog } from '../reducers/blogReducer'
+import { createBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
+import { logoutAction } from '../reducers/userReducer'
 
 import Blog from './Blog'
 import Button from './Button'
 import Notification from './Notification'
 import Togglable from './Togglable'
 
-const BlogForm = ({ user, handleLogout }) => {
+const BlogForm = () => {
+  const user = useSelector((state) => state.user)
   const blogs = useSelector((state) => state.blogs)
   const ref = useRef()
   const dispatch = useDispatch()
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
-
-  useEffect(() => {
-    dispatch(initializeBlogs())
-  }, [dispatch])
 
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -45,7 +43,7 @@ const BlogForm = ({ user, handleLogout }) => {
       <Notification />
       <p>
         {user.name} logged in
-        <Button onClick={handleLogout} buttonText="log out" />
+        <Button onClick={() => dispatch(logoutAction())} buttonText="log out" />
       </p>
 
       <Togglable buttonLabel="new blog" ref={ref}>
