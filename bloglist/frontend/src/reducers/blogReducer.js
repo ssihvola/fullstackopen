@@ -37,4 +37,13 @@ export const likeBlog = (blog) => {
   }
 }
 
+export const deleteBlog = (blog, user) => {
+  if (window.confirm(`delete blog ${blog.name} by ${blog.author}`)) {
+    return async dispatch => {
+      await blogService.remove(blog.id, user.token)
+      dispatch(initializeBlogs())
+    }
+  }
+}
+
 export default blogSlice.reducer
