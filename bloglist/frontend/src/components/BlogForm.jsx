@@ -2,7 +2,7 @@ import { useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { createBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
-import { logoutAction } from '../reducers/userReducer'
+import { logoutAction } from '../reducers/loginReducer'
 
 import Blog from './Blog'
 import Button from './Button'
@@ -10,7 +10,7 @@ import Notification from './Notification'
 import Togglable from './Togglable'
 
 const BlogForm = () => {
-  const user = useSelector((state) => state.user)
+  const user = useSelector((state) => state.login)
   const blogs = useSelector((state) => state.blogs)
   const ref = useRef()
   const dispatch = useDispatch()
@@ -39,13 +39,6 @@ const BlogForm = () => {
 
   return (
     <div>
-      <h2>blogs</h2>
-      <Notification />
-      <p>
-        {user.name} logged in
-        <Button onClick={() => dispatch(logoutAction())} buttonText="log out" />
-      </p>
-
       <Togglable buttonLabel="new blog" ref={ref}>
         <div className="formDiv">
           <h2>create new</h2>
