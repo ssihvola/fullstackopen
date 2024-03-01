@@ -12,13 +12,9 @@ const LoginForm = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    try {
-      dispatch(loginAction(username, password))
-      setUsername('')
-      setPassword('')
-    } catch (exception) {
-      dispatch(setNotification('wrong username or password', 'error', 5000))
-    }
+    dispatch(loginAction(username, password))
+    setUsername('')
+    setPassword('')
   }
 
   return (

@@ -12,7 +12,7 @@ const App = () => {
   useEffect(() => {
     dispatch(initializeBlogs())
     dispatch(getCredentials(user))
-  }, [dispatch, user])
+  }, [])
 
   if (user === null) {
     return <LoginForm />
