@@ -1,52 +1,22 @@
 import { createSlice } from '@reduxjs/toolkit'
-import blogService from '../services/blogs'
-import loginService from '../services/login'
-import { setNotification } from './notificationReducer'
+import userService from '../services/users'
 
 const userSlice = createSlice({
-  name: 'user',
-  initialState: null,
+  name: 'users',
+  initialState: [],
   reducers: {
-    userCredentials(state, action) {
+    setUsers(state, action) {
       return action.payload
     }
   }
 })
 
-export const { userCredentials } = userSlice.actions
+export const { setUsers } = userSlice.actions
 
-export const getCredentials = () => {
+export const getUsers = () => {
   return async dispatch => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      blogService.setToken(user.token)
-      dispatch(userCredentials(user))
-    }
-  }
-}
-
-export const loginAction = (username, password) => {
-  return async dispatch => {
-    try {
-      const user = await loginService.login({
-        username,
-        password
-      })
-
-      blogService.setToken(user.token)
-      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
-      dispatch(userCredentials(user))
-    } catch (error) {
-      dispatch(setNotification('wrong username or password', 'error', 5000))
-    }
-  }
-}
-
-export const logoutAction = () => {
-  return async dispatch => {
-    window.localStorage.clear()
-    dispatch(userCredentials(null))
+    const users = await userService.getAll()
+    dispatch(setUsers(users))
   }
 }
 
