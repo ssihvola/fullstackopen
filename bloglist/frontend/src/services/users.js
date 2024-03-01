@@ -1,9 +1,33 @@
 import axios from 'axios'
 const baseUrl = 'http://localhost:3003/api/users'
 
-const getAll = () => {
-  const request = axios.get(baseUrl)
-  return request.then(response => response.data)
+let token = null
+
+const setCredentials = (user) => {
+  window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
+  token = user.token
 }
 
-export default { getAll }
+const getCredentials = () => {
+  const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      token = user.token
+      return user
+    }
+  return null
+}
+
+const clearCredentials = () => {
+  window.localStorage.clear()
+  token = null
+}
+
+const getToken = () => token
+
+const getAll = async () => {
+  const response = await axios.get(baseUrl)
+  return response.data
+}
+
+export default { setCredentials, getCredentials, clearCredentials, getToken, getAll }
