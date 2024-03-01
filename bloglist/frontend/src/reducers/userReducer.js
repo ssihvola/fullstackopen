@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import blogService from '../services/blogs'
 import loginService from '../services/login'
+import { setNotification } from './notificationReducer'
 
 const userSlice = createSlice({
   name: 'user',
@@ -14,27 +15,31 @@ const userSlice = createSlice({
 
 export const { userCredentials } = userSlice.actions
 
-export const getCredentials = (user) => {
+export const getCredentials = () => {
   return async dispatch => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       blogService.setToken(user.token)
+      dispatch(userCredentials(user))
     }
-    dispatch(userCredentials(user))
   }
 }
 
 export const loginAction = (username, password) => {
   return async dispatch => {
-    const user = await loginService.login({
-      username,
-      password
-    })
+    try {
+      const user = await loginService.login({
+        username,
+        password
+      })
 
-    window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
-    blogService.setToken(user.token)
-    dispatch(userCredentials(user))
+      blogService.setToken(user.token)
+      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
+      dispatch(userCredentials(user))
+    } catch (error) {
+      dispatch(setNotification('wrong username or password', 'error', 5000))
+    }
   }
 }
 
