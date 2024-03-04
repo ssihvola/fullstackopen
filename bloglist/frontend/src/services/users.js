@@ -15,7 +15,6 @@ const getCredentials = () => {
       token = user.token
       return user
     }
-  return null
 }
 
 const clearCredentials = () => {

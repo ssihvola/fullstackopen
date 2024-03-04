@@ -14,18 +14,13 @@ const App = () => {
   const user = useSelector((state) => state.login)
   const dispatch = useDispatch()
 
-  console.log(user)
-
-  // sivua päivittäessä user palattaa ensin nullin, sitten oikean olion
-  // sama users-taulukon kanssa, ensin palauttaa tyhjän, sitten oikean
-
   useEffect(() => {
     const loggedUser = userService.getCredentials()
     if (loggedUser) {
       dispatch(userCredentials(loggedUser))
-      dispatch(getUsers())
-      dispatch(getBlogs())
     }
+    dispatch(getUsers())
+    dispatch(getBlogs())
   }, [dispatch])
 
   if (user === null) {
@@ -33,7 +28,7 @@ const App = () => {
   }
 
   return (
-    <div>
+    <div className="container">
       <h2>blogs</h2>
       <Notification />
       <p>
