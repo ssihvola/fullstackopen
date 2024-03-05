@@ -5,7 +5,7 @@ import { setNotification } from '../reducers/notificationReducer'
 import { Link } from 'react-router-dom'
 import Togglable from './Togglable'
 
-const BlogForm = ({ user, blogs }) => {
+const BlogForm = ({ blogs }) => {
   const ref = useRef()
   const dispatch = useDispatch()
   const [title, setTitle] = useState('')

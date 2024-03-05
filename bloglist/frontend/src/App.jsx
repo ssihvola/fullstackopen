@@ -1,15 +1,15 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Route, Routes } from 'react-router-dom'
-import Button from './components/Button'
 import Notification from './components/Notification'
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
+import NavBar from './components/NavBar'
 import LoginForm from './components/LoginForm'
 import User from './components/User'
 import Users from './components/Users'
 import { getBlogs } from './reducers/blogReducer'
-import { logoutAction, userCredentials } from './reducers/loginReducer'
+import { userCredentials } from './reducers/loginReducer'
 import { getUsers } from './reducers/userReducer'
 import userService from './services/users'
 
@@ -34,17 +34,10 @@ const App = () => {
 
   return (
     <div>
-      <h2>blogs</h2>
-        <Notification />
-        <p>
-          {user.name} logged in
-          <Button
-            onClick={() => dispatch(logoutAction())}
-            buttonText="log out"
-          />
-        </p>
+      <NavBar user={user} dispatch={dispatch} />
+      <Notification />
       <Routes>
-        <Route path="/" element={<BlogForm user={user} blogs={blogs} />} />
+        <Route path="/" element={<BlogForm blogs={blogs} />} />
         <Route path="/users" element={<Users users={users} />} />
         <Route path="/users/:id" element={<User users={users} />} />
         <Route path="blogs/:id" element={<Blog user={user} blogs={blogs} />} />
