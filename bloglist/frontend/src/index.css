@@ -25,3 +25,15 @@
   margin-top: 10px;
   margin-bottom: 10px;
 }
+
+.navBar {
+  background-color: bisque;
+  list-style-type: none;
+  margin: 0;
+  padding: 5px 5px 5px 0px;
+}
+
+.navBarElement {
+  display: inline;
+  padding: 3px;
+}
