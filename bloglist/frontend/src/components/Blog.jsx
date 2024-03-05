@@ -28,6 +28,12 @@ const Blog = ({ user, blogs }) => {
           buttonText="remove"
         />
       )}
+      <h3>comments</h3>
+      {blog.comments.map((comment) => (
+        <div key={comment.id} className="blogComments">
+          {comment.content}
+        </div>
+      ))}
     </div>
   )
 }

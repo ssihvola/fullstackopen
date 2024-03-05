@@ -37,3 +37,8 @@
   display: inline;
   padding: 3px;
 }
+
+.blogComments {
+  margin: 0px;
+  padding: 2px;
+}
