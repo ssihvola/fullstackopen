@@ -1,37 +1,33 @@
-import { useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { useParams } from 'react-router-dom'
 import Button from './Button'
 import { likeBlog, deleteBlog } from '../reducers/blogReducer'
 
-const Blog = ({ blog, user }) => {
-  const [visible, setVisible] = useState(false)
+const Blog = ({ user, blogs }) => {
   const dispatch = useDispatch()
 
-  const hideWhenVisible = { display: visible ? 'none' : '' }
-  const showWhenVisible = { display: visible ? '' : 'none' }
+  const id = useParams().id
+  const blog = blogs.find((b) => b.id === id)
+
+  if (!blog) return null
 
   return (
-    <div className="blogStyle">
-      <div className="blog">
+    <div>
+      <h2>
         {blog.title} {blog.author}
-        <button onClick={() => setVisible(!visible)} style={hideWhenVisible}>
-          view
-        </button>
-        <button onClick={() => setVisible(!visible)} style={showWhenVisible}>
-          hide
-        </button>
+      </h2>
+      <div>{blog.url}</div>
+      <div>
+        likes {blog.likes}
+        <Button onClick={() => dispatch(likeBlog(blog))} buttonText="like" />
       </div>
-      <div style={showWhenVisible} className="togglableContent">
-        <div>{blog.url}</div>
-        <div>
-          likes {blog.likes}
-          <Button onClick={() => dispatch(likeBlog(blog))} buttonText="like" />
-        </div>
-        <div>{blog.user.name}</div>
-        {blog.user.username === user.username && (
-          <Button onClick={() => dispatch(deleteBlog(blog, user))} buttonText="remove" />
-        )}
-      </div>
+      <div>added by {blog.user.name}</div>
+      {blog.user.username === user.username && (
+        <Button
+          onClick={() => dispatch(deleteBlog(blog, user))}
+          buttonText="remove"
+        />
+      )}
     </div>
   )
 }

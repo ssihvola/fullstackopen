@@ -1,22 +1,17 @@
 import { useState, useRef } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { createBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
-import { logoutAction } from '../reducers/loginReducer'
-
-import Blog from './Blog'
-import Button from './Button'
-import Notification from './Notification'
+import { Link } from 'react-router-dom'
 import Togglable from './Togglable'
 
-const BlogForm = () => {
-  const user = useSelector((state) => state.login)
-  const blogs = useSelector((state) => state.blogs)
+const BlogForm = ({ user, blogs }) => {
   const ref = useRef()
   const dispatch = useDispatch()
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
+  const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes)
 
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -34,8 +29,6 @@ const BlogForm = () => {
       ),
     )
   }
-
-  const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes)
 
   return (
     <div>
@@ -76,11 +69,9 @@ const BlogForm = () => {
       </Togglable>
 
       {sortedBlogs.map((blog) => (
-        <Blog
-          key={blog.id}
-          blog={blog}
-          user={user}
-        />
+        <div key={blog.id} className="blogList">
+          <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+        </div>
       ))}
     </div>
   )
