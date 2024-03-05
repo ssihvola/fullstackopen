@@ -18,10 +18,10 @@
   margin-bottom: 10px;
 }
 
-.blogStyle {
-  padding-top: 10;
-  padding-left: 2;
+.blogList {
+  padding: 5px;
   border: solid;
-  border-width: 1;
-  margin-bottom: 5;
+  border-width: 1px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Route, Routes } from 'react-router-dom'
 import Button from './components/Button'
 import Notification from './components/Notification'
+import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
 import User from './components/User'
@@ -15,6 +16,7 @@ import userService from './services/users'
 const App = () => {
   const user = useSelector((state) => state.login)
   const users = useSelector((state) => state.users)
+  const blogs = useSelector((state) => state.blogs)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -31,7 +33,7 @@ const App = () => {
   }
 
   return (
-    <div className="container">
+    <div>
       <h2>blogs</h2>
         <Notification />
         <p>
@@ -42,9 +44,10 @@ const App = () => {
           />
         </p>
       <Routes>
-        <Route path="/" element={<BlogForm />} />
+        <Route path="/" element={<BlogForm user={user} blogs={blogs} />} />
         <Route path="/users" element={<Users users={users} />} />
         <Route path="/users/:id" element={<User users={users} />} />
+        <Route path="blogs/:id" element={<Blog user={user} blogs={blogs} />} />
       </Routes>
     </div>
   )
