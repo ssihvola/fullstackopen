@@ -20,7 +20,6 @@ const NavBar = ({ user, dispatch }) => {
           />
         </li>
       </ul>
-      <h2>blogs</h2>
     </div>
   )
 }
