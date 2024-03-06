@@ -14,8 +14,13 @@ const getAll = () => {
   return request.then(response => response.data)
 }
 
-const create = async newObject => {
+const create = async (newObject) => {
   const response = await axios.post(baseUrl, newObject, config())
+  return response.data
+}
+
+const createComment = async (blog, comment) => {
+  const response = await axios.post(`${baseUrl}/${blog.id}/comments`, comment)
   return response.data
 }
 
@@ -29,4 +34,4 @@ const remove = async (id) => {
   return response.data
 }
 
-export default { getAll, create, update, remove }
+export default { getAll, create, createComment, update, remove }

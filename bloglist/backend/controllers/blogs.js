@@ -50,12 +50,9 @@ blogsRouter.post('/:id/comments', async (request, response, next) => {
       blog: blog._id
     })
 
-    console.log(newComment)
-
     const savedComment = await newComment.save()
     blog.comments.push(savedComment)
     await blog.save()
-    console.log(blog)
     response.status(201).json(savedComment)
   } catch (exception) {
     console.log('error adding comment')
