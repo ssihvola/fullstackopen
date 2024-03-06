@@ -29,12 +29,17 @@ const App = () => {
   }, [dispatch])
 
   if (user === null) {
-    return <LoginForm />
+    return (
+      <div className="appStyle">
+        <LoginForm />
+      </div>
+    )
   }
 
   return (
-    <div>
+    <div className="appStyle">
       <NavBar user={user} dispatch={dispatch} />
+      <h2>blogs</h2>
       <Notification />
       <Routes>
         <Route path="/" element={<BlogForm blogs={blogs} />} />

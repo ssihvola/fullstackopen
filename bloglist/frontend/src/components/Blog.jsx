@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import Button from './Button'
@@ -10,13 +10,16 @@ const Blog = ({ user, blogs }) => {
   const id = useParams().id
   const blog = blogs.find((b) => b.id === id)
 
+  useEffect(() => {
+    dispatch(getBlogs())
+  })
+
   const handleComment = async (event) => {
     event.preventDefault()
     const newComment = {
       content: comment
     }
     dispatch(createComment(blog, newComment))
-    dispatch(getBlogs())
     setComment('')
   }
 

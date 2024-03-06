@@ -68,11 +68,13 @@ const BlogForm = ({ blogs }) => {
         </div>
       </Togglable>
 
-      {sortedBlogs.map((blog) => (
-        <div key={blog.id} className="blogList">
-          <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-        </div>
-      ))}
+      <div className="blogList">
+        {sortedBlogs.map((blog) => (
+          <div key={blog.id} className="blogElement">
+            <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }

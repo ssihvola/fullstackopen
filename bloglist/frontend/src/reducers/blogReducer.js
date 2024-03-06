@@ -32,8 +32,6 @@ export const createBlog = (content) => {
 }
 
 export const createComment = (blog, comment) => {
-  console.log(comment)
-  console.log(blog)
   return async dispatch => {
     const addedComment = await blogService.createComment(blog, comment)
     dispatch(appendBlog((addedComment)))
