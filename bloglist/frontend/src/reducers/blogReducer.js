@@ -23,10 +23,20 @@ export const getBlogs = () => {
   }
 }
 
+
 export const createBlog = (content) => {
   return async dispatch => {
     const newBlog = await blogService.create(content)
     dispatch(appendBlog(newBlog))
+  }
+}
+
+export const createComment = (blog, comment) => {
+  console.log(comment)
+  console.log(blog)
+  return async dispatch => {
+    const addedComment = await blogService.createComment(blog, comment)
+    dispatch(appendBlog((addedComment)))
   }
 }
 
